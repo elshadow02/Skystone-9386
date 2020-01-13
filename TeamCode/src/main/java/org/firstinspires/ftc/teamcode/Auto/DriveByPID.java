@@ -87,8 +87,8 @@ public class DriveByPID extends LinearOpMode {
 
 
     private void gyroDrive(double targetAngle, double desiredPower, double distance, double timeout) {
-        PIDController controller = new PIDController(DRIVE_kP, 0, 0);
-        PIDController driveControl = new PIDController(DRIVE_kP, 0, 0);
+        PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -102,7 +102,7 @@ public class DriveByPID extends LinearOpMode {
 
         double startTime = time;
 
-        double angleEerror, driveError;
+        double angleError, driveError;
         double rightError, leftError;
 
         while (opModeIsActive() && Math.abs(wheel1.getCurrentPosition() - rightStart) < distance && Math.abs(wheel2.getCurrentPosition() - leftStart) < distance) {
@@ -113,13 +113,13 @@ public class DriveByPID extends LinearOpMode {
 
             Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
             double angle = orientation.thirdAngle;
-            angleEerror = targetAngle - angle;
+            angleError = targetAngle - angle;
             if (targetAngle - angle > 180) {
-                angleEerror = targetAngle - (angle + 360);
+                angleError = targetAngle - (angle + 360);
             } else if (targetAngle - angle < -180) {
-                angleEerror = targetAngle - (angle - 360);
+                angleError = targetAngle - (angle - 360);
             } else {
-                angleEerror = targetAngle - angle;
+                angleError = targetAngle - angle;
             }
 
             rightError = wheel1.getCurrentPosition() - rightStart;
@@ -127,7 +127,7 @@ public class DriveByPID extends LinearOpMode {
 
             driveError = (rightError + leftError)/2;
 
-            double correction = controller.calculate(angleEerror); //controller.calculate(error);
+            double correction = controller.calculate(angleError); //controller.calculate(error);
 
             double errorPower = (driveControl.calculate(driveError)) * desiredPower;
 
@@ -140,7 +140,7 @@ public class DriveByPID extends LinearOpMode {
                 leftPower = leftPower / max;
             }
 
-            telemetry.addData("error", angleEerror);
+            telemetry.addData("error", angleError);
             telemetry.addData("correction", correction);
             telemetry.addData("rightPower", rightPower);
             telemetry.addData("leftPower", leftPower);
@@ -222,13 +222,13 @@ public class DriveByPID extends LinearOpMode {
             }
             count += 1;
 
-            telemetry.addData("loop count", count);
-            telemetry.addData("error", error);
-            telemetry.addData("Angle", angle);
-            telemetry.addData("correction", correction);
-            telemetry.addData("rightPower", rightPower);
-            telemetry.addData("leftPower", leftPower);
-            telemetry.update();
+//            telemetry.addData("loop count", count);
+//            telemetry.addData("error", error);
+//            telemetry.addData("Angle", angle);
+//            telemetry.addData("correction", correction);
+//            telemetry.addData("rightPower", rightPower);
+//            telemetry.addData("leftPower", leftPower);
+//            telemetry.update();
 
             wheel1.setPower(rightPower);
             wheel4.setPower(rightPower);
