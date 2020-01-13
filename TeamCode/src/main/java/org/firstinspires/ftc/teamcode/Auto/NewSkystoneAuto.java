@@ -146,6 +146,12 @@ public class NewSkystoneAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        bot.init(hardwareMap);
+
+        wheel1 = bot.frontRight;
+        wheel2 = bot.frontLeft;
+        wheel3 = bot.backLeft;
+        wheel4 = bot.backRight;
 
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
