@@ -17,6 +17,11 @@ public class CoordinatePosition
 
     }
 
+    public CoordinatePosition(float XCoordinate, float YCoordinate){
+        this.XCoordinate = XCoordinate;
+        this.YCoordinate = YCoordinate;
+    }
+
     public void setXCoordinate(float XCoordinate) {
         this.XCoordinate = XCoordinate;
     }
