@@ -51,36 +51,36 @@ public class DriveByPID extends LinearOpMode {
         wheel3 = bot.backLeft;
         wheel4 = bot.backRight;
 
-        Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+//        Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
         waitForStart();
 
         double startTime = time;
 
-        telemetry.addData("finished", orientation.thirdAngle);
-        telemetry.update();
-
-        bot.intakeLeft.setPower(1);
-        bot.intakeRight.setPower(1);
-
-        drive(0.3, 15, 5.0);
-
-        sleep (1500);
-
-        bot.intakeLeft.setPower(0);
-        bot.intakeRight.setPower(0);
-
-//            sleep (3000);
+//        telemetry.addData("finished", orientation.thirdAngle);
+//        telemetry.update();
 //
-//            turn(90);
+//        bot.intakeLeft.setPower(1);
+//        bot.intakeRight.setPower(1);
 //
-//            sleep(5000);
+//        drive(0.5, 15, 5.0);
 //
-//            turn(0);
+//        sleep (1500);
 //
-//            sleep(5000);
-//
-//            turn(-90);
+//        bot.intakeLeft.setPower(0);
+//        bot.intakeRight.setPower(0);
+
+            //sleep (3000);
+
+            gyroDrive(0, 1.0, 30, 5.0);
+
+            sleep(5000);
+
+            gyroDrive(0, 1.0, -30, 5.0);
+
+            sleep(5000);
+
+        gyroDrive(90, 1.0, 20, 5.0);
 
     }
 
@@ -171,7 +171,8 @@ public class DriveByPID extends LinearOpMode {
 
         // Ethan: if you're getting odd values from this controller, switch the below line to: PController controller = new PController(TURN_kP);
         // Read the notes next to TURN_kP if you're still having trouble
-        PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        //PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -222,13 +223,16 @@ public class DriveByPID extends LinearOpMode {
             }
             count += 1;
 
+            if (Math.abs(error) < 5) {
+                telemetry.addLine("error near");
+            }
 //            telemetry.addData("loop count", count);
-//            telemetry.addData("error", error);
+            telemetry.addLine("error: " + error + "; angle: " + angle);
 //            telemetry.addData("Angle", angle);
 //            telemetry.addData("correction", correction);
 //            telemetry.addData("rightPower", rightPower);
 //            telemetry.addData("leftPower", leftPower);
-//            telemetry.update();
+            telemetry.update();
 
             wheel1.setPower(rightPower);
             wheel4.setPower(rightPower);
@@ -251,7 +255,7 @@ public class DriveByPID extends LinearOpMode {
     }
 
     private void turn(double angle){
-        gyroTurn(angle, .3, DISTANCE, 7.0);
+        gyroTurn(angle, 0.5, DISTANCE, 7.0);
     }
 
     private void drive(double desiredPower, double distance, double timeout) {

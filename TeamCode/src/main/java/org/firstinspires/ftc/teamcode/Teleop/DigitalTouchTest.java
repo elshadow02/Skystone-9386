@@ -67,7 +67,7 @@ public class DigitalTouchTest extends LinearOpMode {
         // get a reference to our digitalTouch object.
         up = hardwareMap.get(DigitalChannel.class, "up");
         down = hardwareMap.get(DigitalChannel.class, "down");
-        motor = hardwareMap.get(DcMotor.class, "motor");
+        motor = hardwareMap.get(DcMotor.class, "lift");
 
         // set the digital channel to input.
         up.setMode(DigitalChannel.Mode.INPUT);
@@ -83,7 +83,7 @@ public class DigitalTouchTest extends LinearOpMode {
             // send the info back to driver station using telemetry function.
             // if the digital channel returns true it's HIGH and the button is unpressed.
             if (up.getState() == true && down.getState() == true) {
-                motor.setPower(-gamepad1.left_stick_y * 0.6);
+                motor.setPower(-gamepad1.left_stick_y);
                 telemetry.addData("Up", "Is Not Pressed");
                 telemetry.addData("Down", "Is Not Pressed");
             }

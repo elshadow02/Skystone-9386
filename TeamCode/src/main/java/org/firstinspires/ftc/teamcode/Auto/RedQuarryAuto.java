@@ -25,7 +25,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@Autonomous(name="BlueQuarryAuto", group ="Concept")
+@Autonomous(name="RedQuarryAuto", group ="Concept")
 public class RedQuarryAuto extends LinearOpMode {
 
     EEHardware bot = new EEHardware();
@@ -444,11 +444,6 @@ public class RedQuarryAuto extends LinearOpMode {
             count += 1;
 
             telemetry.addData("loop count", count);
-            telemetry.addData("error", error);
-            telemetry.addData("Angle", angle);
-            telemetry.addData("correction", correction);
-            telemetry.addData("rightPower", rightPower);
-            telemetry.addData("leftPower", leftPower);
             telemetry.update();
 
             wheel1.setPower(rightPower);
