@@ -81,7 +81,7 @@ public class RedFoundationAuto extends LinearOpMode {
 
     private void strafe(double desiredPower, double distance, double timeout, boolean right) {
         //PIDController controller = new PIDController(DRIVE_kP, 0, 0);
-        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+        //PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -98,36 +98,19 @@ public class RedFoundationAuto extends LinearOpMode {
         double angleEerror, driveError;
         double rightError, leftError;
 
-        while (opModeIsActive() && ((time -startTime)< timeout)) {
+        while (opModeIsActive() && ((time -startTime)< timeout) && Math.abs(bot.frontRight.getCurrentPosition() - rightStart) <= distance && Math.abs(bot.frontLeft.getCurrentPosition() - leftStart) <= distance) {
 
-            driveControl.setkP(DRIVE_kP);
-            driveControl.setkI(DRIVE_kI);
-            driveControl.setkD(DRIVE_kD);
+//            driveControl.setkP(DRIVE_kP);
+//            driveControl.setkI(DRIVE_kI);
+//            driveControl.setkD(DRIVE_kD);
 
             rightError = distance - (wheel1.getCurrentPosition() - rightStart);
             leftError = distance - (wheel2.getCurrentPosition() - leftStart);
 
             driveError = (rightError + leftError) / 2;
 
-            //double correction = controller.calculate(angleEerror); //controller.calculate(error);
-
-            double errorPower = driveControl.calculate(driveError);
-
-            double rightPower = errorPower;
-            double leftPower = errorPower;
-
-            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
-            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
-                rightPower = rightPower / max;
-                leftPower = leftPower / max;
-            }
-
             // telemetry.addData("error", angleEerror);
             //telemetry.addData("correction", correction);
-            telemetry.addData("rightPower: ", rightPower);
-            telemetry.addData("leftPower: ", leftPower);
-            telemetry.addData("driveError: ", driveError);
-            telemetry.addData("Error power: ", errorPower);
             telemetry.addData("rightEncoder: ", bot.frontRight.getCurrentPosition());
             telemetry.addData("leftEncoder: ", bot.frontLeft.getCurrentPosition());
             telemetry.addData("distance: ", distance);
@@ -136,17 +119,17 @@ public class RedFoundationAuto extends LinearOpMode {
             //telemetry.addData("Current angle:", orientation.thirdAngle);
             telemetry.update();
 
-            if (right == true){
-                wheel1.setPower(rightPower * desiredPower);
-                wheel4.setPower(-rightPower * desiredPower);
-                wheel2.setPower(-leftPower * desiredPower);
-                wheel3.setPower(leftPower * desiredPower);
+            if (right == false){
+                wheel1.setPower(desiredPower);
+                wheel4.setPower(-desiredPower);
+                wheel2.setPower(-desiredPower);
+                wheel3.setPower(desiredPower);
             }
             else {
-                wheel1.setPower(-rightPower * desiredPower);
-                wheel4.setPower(rightPower * desiredPower);
-                wheel2.setPower(leftPower * desiredPower);
-                wheel3.setPower(-leftPower * desiredPower);
+                wheel1.setPower(-desiredPower);
+                wheel4.setPower(desiredPower);
+                wheel2.setPower(desiredPower);
+                wheel3.setPower(-desiredPower);
             }
         }
         wheel1.setPower(0);
@@ -177,7 +160,7 @@ public class RedFoundationAuto extends LinearOpMode {
         double angleEerror, driveError;
         double rightError, leftError;
 
-        while (opModeIsActive() && ((time -startTime)< timeout)) {
+        do {
 
             driveControl.setkP(DRIVE_kP);
             driveControl.setkI(DRIVE_kI);
@@ -230,6 +213,7 @@ public class RedFoundationAuto extends LinearOpMode {
             wheel2.setPower(leftPower * desiredPower);
             wheel3.setPower(leftPower * desiredPower);
         }
+        while (opModeIsActive() && ((time -startTime)< timeout) && Math.abs(bot.frontRight.getPower()) > 0.15 && Math.abs(bot.frontLeft.getPower()) > 0.15);
         wheel1.setPower(0);
         wheel4.setPower(0);
         wheel2.setPower(0);

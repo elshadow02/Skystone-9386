@@ -126,13 +126,13 @@ public class RedQuarryAuto extends LinearOpMode {
         double travel = 0;
 
         if (SkystonePos == 1){
-            travel = 12.25;
+            travel = 15.25;
         }
         else if (SkystonePos == 2){
-            travel = 20.25;
+            travel = 23.25;
         }
         else{
-            travel = 28.25;
+            travel = 31.25;
         }
 
         strafe(0.7, travel, 5.0, false);
@@ -140,25 +140,25 @@ public class RedQuarryAuto extends LinearOpMode {
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
 
-        drive(0.6, 26, 5.0);
+        drive(0.6, 35, 5.0);
 
         sleep (1000);
 
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -2, 2.0);
+        drive(1.0, -4, 2.0);
 
         gyroTurn(-90, 1.0, 20, 3.0);
 
         if (SkystonePos == 1){
-            drive(1.0, 40, 5.0);
+            drive(1.0, 42, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, 48, 5.0);
+            drive(1.0, 50, 5.0);
         }
         else{
-            drive(1.0, 56, 5.0);
+            drive(1.0, 58, 5.0);
         }
 
         bot.intakeLeft.setPower(-1);
@@ -172,14 +172,16 @@ public class RedQuarryAuto extends LinearOpMode {
         double thirdTravel = 0;
 
         if (SkystonePos == 1){
-            drive(1.0, -64, 5.0);
+            drive(1.0, -59, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, -72, 5.0);
+            drive(1.0, -67, 5.0);
         }
         else{
-            drive(1.0, -76, 5.0);
+            drive(1.0, -71, 5.0);
         }
+
+        strafe(1.0, 4, 2.0,true);
 
         if(SkystonePos == 3){
             gyroTurn(10, 1.0, 22, 3.0);
@@ -191,12 +193,12 @@ public class RedQuarryAuto extends LinearOpMode {
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
 
-        drive (0.5, 6.0, 5.0);
+        drive (0.5, 10.0, 5.0);
 
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -6.0, 2.0);
+        drive(1.0, -9.0, 2.0);
 
         if(SkystonePos == 3){
             gyroTurn(-90, 1.0, 22, 3.0);
@@ -228,7 +230,7 @@ public class RedQuarryAuto extends LinearOpMode {
 
     private void strafe(double desiredPower, double distance, double timeout, boolean right) {
         //PIDController controller = new PIDController(DRIVE_kP, 0, 0);
-        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+        //PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -245,36 +247,19 @@ public class RedQuarryAuto extends LinearOpMode {
         double angleEerror, driveError;
         double rightError, leftError;
 
-        while (opModeIsActive() && ((time -startTime)< timeout)) {
+        while (opModeIsActive() && ((time -startTime)< timeout) && Math.abs(bot.frontRight.getCurrentPosition() - rightStart) <= distance && Math.abs(bot.frontLeft.getCurrentPosition() - leftStart) <= distance) {
 
-            driveControl.setkP(DRIVE_kP);
-            driveControl.setkI(DRIVE_kI);
-            driveControl.setkD(DRIVE_kD);
+//            driveControl.setkP(DRIVE_kP);
+//            driveControl.setkI(DRIVE_kI);
+//            driveControl.setkD(DRIVE_kD);
 
             rightError = distance - (wheel1.getCurrentPosition() - rightStart);
             leftError = distance - (wheel2.getCurrentPosition() - leftStart);
 
             driveError = (rightError + leftError) / 2;
 
-            //double correction = controller.calculate(angleEerror); //controller.calculate(error);
-
-            double errorPower = driveControl.calculate(driveError);
-
-            double rightPower = errorPower;
-            double leftPower = errorPower;
-
-            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
-            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
-                rightPower = rightPower / max;
-                leftPower = leftPower / max;
-            }
-
             // telemetry.addData("error", angleEerror);
             //telemetry.addData("correction", correction);
-            telemetry.addData("rightPower: ", rightPower);
-            telemetry.addData("leftPower: ", leftPower);
-            telemetry.addData("driveError: ", driveError);
-            telemetry.addData("Error power: ", errorPower);
             telemetry.addData("rightEncoder: ", bot.frontRight.getCurrentPosition());
             telemetry.addData("leftEncoder: ", bot.frontLeft.getCurrentPosition());
             telemetry.addData("distance: ", distance);
@@ -283,17 +268,17 @@ public class RedQuarryAuto extends LinearOpMode {
             //telemetry.addData("Current angle:", orientation.thirdAngle);
             telemetry.update();
 
-            if (right == true){
-                wheel1.setPower(rightPower * desiredPower);
-                wheel4.setPower(-rightPower * desiredPower);
-                wheel2.setPower(-leftPower * desiredPower);
-                wheel3.setPower(leftPower * desiredPower);
+            if (right == false){
+                wheel1.setPower(desiredPower);
+                wheel4.setPower(-desiredPower);
+                wheel2.setPower(-desiredPower);
+                wheel3.setPower(desiredPower);
             }
             else {
-                wheel1.setPower(-rightPower * desiredPower);
-                wheel4.setPower(rightPower * desiredPower);
-                wheel2.setPower(leftPower * desiredPower);
-                wheel3.setPower(-leftPower * desiredPower);
+                wheel1.setPower(-desiredPower);
+                wheel4.setPower(desiredPower);
+                wheel2.setPower(desiredPower);
+                wheel3.setPower(-desiredPower);
             }
         }
         wheel1.setPower(0);
@@ -324,7 +309,7 @@ public class RedQuarryAuto extends LinearOpMode {
         double angleEerror, driveError;
         double rightError, leftError;
 
-        while (opModeIsActive() && ((time -startTime)< timeout)) {
+        do {
 
             driveControl.setkP(DRIVE_kP);
             driveControl.setkI(DRIVE_kI);
@@ -377,6 +362,7 @@ public class RedQuarryAuto extends LinearOpMode {
             wheel2.setPower(leftPower * desiredPower);
             wheel3.setPower(leftPower * desiredPower);
         }
+        while (opModeIsActive() && ((time -startTime)< timeout) && Math.abs(bot.frontRight.getPower()) > 0.15 && Math.abs(bot.frontLeft.getPower()) > 0.15);
         wheel1.setPower(0);
         wheel4.setPower(0);
         wheel2.setPower(0);
@@ -444,6 +430,11 @@ public class RedQuarryAuto extends LinearOpMode {
             count += 1;
 
             telemetry.addData("loop count", count);
+            telemetry.addData("error", error);
+            telemetry.addData("Angle", angle);
+            telemetry.addData("correction", correction);
+            telemetry.addData("rightPower", rightPower);
+            telemetry.addData("leftPower", leftPower);
             telemetry.update();
 
             wheel1.setPower(rightPower);

@@ -203,6 +203,8 @@ public class BlueQuarryAuto extends LinearOpMode {
             drive(1.0, -71, 5.0);
         }
 
+        strafe(1.0, 4, 2.0,false);
+
         if(SkystonePos == 3){
             gyroTurn(-10, 1.0, 22, 3.0);
         }
