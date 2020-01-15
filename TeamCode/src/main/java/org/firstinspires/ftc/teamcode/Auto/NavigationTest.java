@@ -11,9 +11,9 @@ import com.vuforia.Frame;
 //import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
 
 /*
- * This is an example of a more complex path to really test the tuning.
+ * This is an example of a more complex path to really foundationLeft the tuning.
  */
-@TeleOp(name="nav test", group = "TeleOp")
+@TeleOp(name="nav foundationLeft", group = "TeleOp")
 public class NavigationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

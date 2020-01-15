@@ -74,7 +74,7 @@ public class DriveConstants {
 
 
     public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / MOTOR_CONFIG.getTicksPerRev();
+        return 537.6/(4*Math.PI);
     }
 
     public static double rpmToVelocity(double rpm) {

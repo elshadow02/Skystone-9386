@@ -69,7 +69,7 @@ public class SampleMecanumDriveREVOptimized extends SampleMecanumDriveBase {
         }
 
         if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
-            setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+            setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDCoefficients(0.001, 0.0000007, 1));
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()

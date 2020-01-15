@@ -36,14 +36,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.motors.GoBILDA5202Series;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -55,22 +51,13 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Teleop.EEHardware;
-import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
-import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
-import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -997,7 +984,7 @@ public class SkystoneFPS extends LinearOpMode {
 
         double crrt = robot.frontLeft.getCurrentPosition();
 
-        robot.block.setPosition(0);
+        robot.foundationRight.setPosition(0);
 
         while (robot.color.alpha() < 22 || robot.color.alpha() > 30){
             gyroDrive(-90, -0.5, 30, 5.0);
@@ -1005,7 +992,7 @@ public class SkystoneFPS extends LinearOpMode {
 
         xDiff = (robot.frontLeft.getCurrentPosition()-crrt)/TICKS_PER_INCH;
 
-        robot.block.setPosition(0.6);
+        robot.foundationRight.setPosition(0.6);
 
         gyroDrive(-90, 1.0, 4, 5.0);
 
@@ -1033,7 +1020,7 @@ public class SkystoneFPS extends LinearOpMode {
             gyroDrive(90, -1.0, 92, 7.0);
         }
 
-        if (robot.touch.isPressed()){
+        if (robot.up.isPressed()){
             gyroTurn(179, 1.0, 12, 5.0);
         }
         else {
@@ -1083,7 +1070,7 @@ public class SkystoneFPS extends LinearOpMode {
             gyroDrive(90, -1.0, 112, 7.0);
         }
 
-        if (robot.touch.isPressed()){
+        if (robot.up.isPressed()){
             gyroTurn(179, 1.0, 12, 5.0);
         }
         else {
@@ -1109,7 +1096,7 @@ public class SkystoneFPS extends LinearOpMode {
 
         gyroTurn(-90, 1.0, 45, 5.0);
 
-        robot.block.setPosition(0);
+        robot.foundationRight.setPosition(0);
 
         sleep(1000);
 
@@ -1119,7 +1106,7 @@ public class SkystoneFPS extends LinearOpMode {
             gyroDrive(-90, 0.3, 30, 5.0);
         }
 
-        robot.block.setPosition(0.6);
+        robot.foundationRight.setPosition(0.6);
 
         xDiff = (robot.frontLeft.getCurrentPosition()-crrt)/TICKS_PER_INCH;
 
@@ -1147,7 +1134,7 @@ public class SkystoneFPS extends LinearOpMode {
             gyroDrive(-90, -1.0, 92, 7.0);
         }
 
-        if (robot.touch.isPressed()){
+        if (robot.up.isPressed()){
             gyroTurn(-179, 1.0, 12, 5.0);
         }
         else {
@@ -1197,7 +1184,7 @@ public class SkystoneFPS extends LinearOpMode {
             gyroDrive(-90, -1.0, 112, 7.0);
         }
 
-        if (robot.touch.isPressed()){
+        if (robot.up.isPressed()){
             gyroTurn(-179, 1.0, 12, 5.0);
         }
         else {

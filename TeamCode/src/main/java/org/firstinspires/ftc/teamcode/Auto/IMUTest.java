@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Teleop.EEHardware;
 
-@TeleOp(name="Imu Test", group="test")
+@TeleOp(name="Imu Test", group="foundationLeft")
 public class IMUTest extends LinearOpMode {
 
     EEHardware bot = new EEHardware();

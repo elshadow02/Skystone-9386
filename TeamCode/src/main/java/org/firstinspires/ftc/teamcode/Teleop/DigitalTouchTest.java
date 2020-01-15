@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
  * This is an example LinearOpMode that shows how to use
  * a REV Robotics Touch Sensor.
  *
- * It assumes that the touch sensor is configured with a name of "sensor_digital".
+ * It assumes that the up sensor is configured with a name of "sensor_digital".
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
@@ -57,21 +57,21 @@ public class DigitalTouchTest extends LinearOpMode {
      * The lower (first) pin stays unconnected.*
      */
 
-    DigitalChannel up;  // Hardware Device Object
+    //DigitalChannel up;  // Hardware Device Object
     DcMotor motor;
-    DigitalChannel down;
+//    DigitalChannel down;
 
     @Override
     public void runOpMode() {
 
         // get a reference to our digitalTouch object.
-        up = hardwareMap.get(DigitalChannel.class, "up");
-        down = hardwareMap.get(DigitalChannel.class, "down");
+        //up = hardwareMap.get(DigitalChannel.class, "up");
+        //down = hardwareMap.get(DigitalChannel.class, "down");
         motor = hardwareMap.get(DcMotor.class, "lift");
 
         // set the digital channel to input.
-        up.setMode(DigitalChannel.Mode.INPUT);
-        down.setMode(DigitalChannel.Mode.INPUT);
+//        up.setMode(DigitalChannel.Mode.INPUT);
+//        down.setMode(DigitalChannel.Mode.INPUT);
 
         // wait for the start button to be pressed.
         waitForStart();
@@ -82,32 +82,34 @@ public class DigitalTouchTest extends LinearOpMode {
 
             // send the info back to driver station using telemetry function.
             // if the digital channel returns true it's HIGH and the button is unpressed.
-            if (up.getState() == true && down.getState() == true) {
-                motor.setPower(-gamepad1.left_stick_y);
-                telemetry.addData("Up", "Is Not Pressed");
-                telemetry.addData("Down", "Is Not Pressed");
-            }
-            else if (up.getState() == false){
-                if ((-gamepad1.left_stick_y) > 0){
-                    motor.setPower(0);
-                }
-                else{
-                    motor.setPower(-gamepad1.left_stick_y * 0.6);
-                }
-                telemetry.addData("Up", "Is Pressed");
-            }
-            else if (down.getState() == false){
-                if ((-gamepad1.left_stick_y) < 0){
-                    motor.setPower(0);
-                }
-                else{
-                    motor.setPower(-gamepad1.left_stick_y * 0.6);
-                }
-                telemetry.addData("Down", "Is Pressed");
-            }
-            else{
-                telemetry.addData("ARGH!", "IT BROKE!!");
-            }
+//            if (up.getState() == true && down.getState() == true) {
+//                motor.setPower(-gamepad1.left_stick_y);
+//                telemetry.addData("Up", "Is Not Pressed");
+//                telemetry.addData("Down", "Is Not Pressed");
+//            }
+//            else if (up.getState() == false){
+//                if ((-gamepad1.left_stick_y) > 0){
+//                    motor.setPower(0);
+//                }
+//                else{
+//                    motor.setPower(-gamepad1.left_stick_y * 0.6);
+//                }
+//                telemetry.addData("Up", "Is Pressed");
+//            }
+//            else if (down.getState() == false){
+//                if ((-gamepad1.left_stick_y) < 0){
+//                    motor.setPower(0);
+//                }
+//                else{
+//                    motor.setPower(-gamepad1.left_stick_y * 0.6);
+//                }
+//                telemetry.addData("Down", "Is Pressed");
+//            }
+//            else{
+//                telemetry.addData("ARGH!", "IT BROKE!!");
+//            }
+
+            motor.setPower(-gamepad1.left_stick_y);
 
             telemetry.addData("Motor Power", motor.getPower());
 

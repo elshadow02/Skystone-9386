@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
 
 /*
- * This is a simple routine to test translational drive capabilities.
+ * This is a simple routine to foundationLeft translational drive capabilities.
  */
 @Config
 @Autonomous(group = "drive")

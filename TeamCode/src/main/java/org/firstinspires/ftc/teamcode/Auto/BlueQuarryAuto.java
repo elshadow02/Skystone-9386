@@ -150,13 +150,13 @@ public class BlueQuarryAuto extends LinearOpMode {
         double travel = 0;
 
         if (SkystonePos == 1){
-            travel = 15.25;
+            travel = 14.25;
         }
         else if (SkystonePos == 2){
             travel = 23.25;
         }
         else{
-            travel = 31.25;
+            travel = 31.75;
         }
 
         strafe(0.7, travel, 5.0, true);
@@ -164,14 +164,14 @@ public class BlueQuarryAuto extends LinearOpMode {
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
 
-        drive(0.6, 35, 5.0);
+        drive(0.4, 38.5, 6.0);
 
         sleep (1000);
 
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -4, 2.0);
+        drive(1.0, -6, 2.0);
 
         gyroTurn(90, 1.0, 20, 3.0);
 
@@ -197,46 +197,55 @@ public class BlueQuarryAuto extends LinearOpMode {
             drive(1.0, -59, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, -67, 5.0);
+            drive(1.0, -65, 5.0);
         }
         else{
-            drive(1.0, -71, 5.0);
+            drive(1.0, -61, 5.0);
         }
 
-        strafe(1.0, 4, 2.0,false);
+        strafe(1.0, 8, 2.0,false);
 
         if(SkystonePos == 3){
-            gyroTurn(-10, 1.0, 22, 3.0);
+            gyroTurn(-20, 1.0, 29, 3.0);
         }
         else {
-            gyroTurn(0, 1.0, 20, 3.0);
+            gyroTurn(0, 1.0, 21.5, 3.0);
         }
 
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
 
-        drive (0.5, 10.0, 5.0);
+        if(SkystonePos == 3){
+            drive (0.5, 18.0, 5.0);
+        }
+        else {
+            drive (0.5, 14.0, 5.0);
+        }
+
+        sleep(1500);
 
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -9.0, 2.0);
+        drive(1.0, -6.0, 2.0);
+
+        strafe(1.0, 8, 2.0, false);
 
         if(SkystonePos == 3){
-            gyroTurn(90, 1.0, 22, 3.0);
+            gyroTurn(90, 1.0, 24, 3.0);
         }
         else {
             gyroTurn(90, 1.0, 20, 3.0);
         }
 
         if (SkystonePos == 1){
-            drive(1.0, 64, 5.0);
+            drive(1.0, 69, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, 72, 5.0);
+            drive(1.0, 77, 5.0);
         }
         else{
-            drive(1.0, 76, 5.0);
+            drive(1.0, 81, 5.0);
         }
 
         bot.intakeLeft.setPower(-1);

@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-@TeleOp(name="Skystone")
-public class Skystone1 extends LinearOpMode {
+@TeleOp(name="TeleOp")
+public class SkyStoneTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () {
@@ -14,7 +13,7 @@ public class Skystone1 extends LinearOpMode {
         EEHardware robot = new EEHardware();
 
         // Arm arm = new Arm(hardwareMap);
-       // Lift lift = new Lift(hardwareMap);
+        // Lift lift = new Lift(hardwareMap);
 
         double kR = 0.95;
         double clawPos = 0.5;
@@ -76,23 +75,34 @@ public class Skystone1 extends LinearOpMode {
                 robot.intakeLeft.setPower(0);
             }
 
-            if (Math.abs(gamepad2.left_stick_y) > 0.1) {
-                robot.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                robot.lift.setPower(-1*Math.abs(gamepad2.left_stick_y));
-            } else {
-                robot.lift.setPower(0
-                );
+            if (robot.up.isPressed() == false && robot.down.isPressed() == false) {
+                robot.lift.setPower(-gamepad1.left_stick_y);
+                telemetry.addData("Up", "Is Not Pressed");
+                telemetry.addData("Down", "Is Not Pressed");
+            }
+            else if (robot.up.isPressed() == true){
+                if ((-gamepad1.left_stick_y) > 0){
+                    robot.lift.setPower(0);
+                }
+                else{
+                    robot.lift.setPower(-gamepad1.left_stick_y * 0.6);
+                }
+                telemetry.addData("Up", "Is Pressed");
+            }
+            else if (robot.down.isPressed() == true){
+                if ((-gamepad1.left_stick_y) < 0){
+                    robot.lift.setPower(0);
+                }
+                else{
+                    robot.lift.setPower(-gamepad1.left_stick_y * 0.6);
+                }
+                telemetry.addData("Down", "Is Pressed");
+            }
+            else{
+                telemetry.addData("ARGH!", "IT BROKE!!");
             }
 
-            if (Math.abs(gamepad2.right_stick_y) > 0.1) {
-                robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                robot.arm.setPower(-gamepad2.right_stick_y * 0.65);
-                x = robot.arm.getCurrentPosition();
-            } else {
-                robot.arm.setTargetPosition(x);
-                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.arm.setPower(1);
-            }
+            robot.arm.setPower(-gamepad2.right_stick_y);
 
             if (gamepad1.a){
                 robot.foundationRight.setPosition(0.15);
@@ -104,23 +114,6 @@ public class Skystone1 extends LinearOpMode {
                 robot.foundationRight.setPosition(0
                 );
             }
-//            if (gamepad1.a) {
-//                arm.goToAngle(0);
-//            }
-//
-//            if (gamepad1.b) {
-//                arm.goToAngle(90);
-//            }
-
-//            if (gamepad1.x){
-//                arm.goToAngle1(0);
-//            }
-//
-//            if (gamepad1.y){
-//                arm.goToAngle1(90);
-//            }
-//
-//            arm.update();
 
             if (gamepad1.dpad_up){
                 robot.intakeRightServo.setPosition(0.32);
@@ -174,3 +167,4 @@ public class Skystone1 extends LinearOpMode {
     }
 
 }
+

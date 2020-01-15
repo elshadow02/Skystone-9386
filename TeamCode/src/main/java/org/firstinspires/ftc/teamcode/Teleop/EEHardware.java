@@ -73,18 +73,19 @@ public class EEHardware {
     public DcMotor lift = null;
     public DcMotor arm = null;
 
-    public Servo test = null;
+    public Servo foundationLeft = null;
     public Servo intakeLeftServo = null;
     public Servo intakeRightServo = null;
     public Servo claw = null;
-    public Servo block = null;
+    public Servo foundationRight = null;
 
     public double xCord = 0;
     public double yCord = 0;
 
     public ColorSensor color;
     public DistanceSensor sensorDistance;
-    public TouchSensor touch;
+    public TouchSensor up;
+    public TouchSensor down;
 
     public static final double CORE_HEX_TPR   = 288;  // Core Hex has 4 ppr at base, 72:1 gearbox ratio means 288 ppr at shaft.
     public static final double HD_HEX_TPR     = 2240; // HD Hex Motor has 56  ppr at base, geared at 40:1 creates 2,240 ticks ppr at shaft.
@@ -119,7 +120,8 @@ public class EEHardware {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
 //        color = hwMap.get(ColorSensor.class, "sensor");
-//        touch = hwMap.get(TouchSensor.class, "touch");
+        up = hwMap.get(TouchSensor.class, "up");
+        down = hwMap.get(TouchSensor.class, "down");
 
         // get a reference to the distance sensor that shares the same name.
         //sensorDistance = hwMap.get(DistanceSensor.class, "sensor");
@@ -137,14 +139,14 @@ public class EEHardware {
 
         intakeLeft = hwMap.get(DcMotor.class, "iL");
         intakeRight = hwMap.get(DcMotor.class, "iR");
-//        lift = hwMap.get(DcMotor.class, "lift");
-//        arm = hwMap.get(DcMotor.class, "arm");
+        lift = hwMap.get(DcMotor.class, "lift");
+        arm = hwMap.get(DcMotor.class, "arm");
 //
-//        test = hwMap.get(Servo.class, "test");
-//        claw = hwMap.get(Servo.class, "claw");
-//        block = hwMap.get(Servo.class, "block");
-//        intakeLeftServo = hwMap.get(Servo.class, "iLS");
-//        intakeRightServo = hwMap.get(Servo.class, "iRS");
+        foundationLeft = hwMap.get(Servo.class, "foundL");
+        claw = hwMap.get(Servo.class, "claw");
+        foundationRight = hwMap.get(Servo.class, "foundR");
+        intakeLeftServo = hwMap.get(Servo.class, "iLS");
+        intakeRightServo = hwMap.get(Servo.class, "iRS");
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
@@ -157,8 +159,8 @@ public class EEHardware {
         backRight.setPower(0);
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
-//        lift.setPower(0);
-//        arm.setPower(0);
+        lift.setPower(0);
+        arm.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -180,9 +182,9 @@ public class EEHardware {
 
         intakeRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //intakeLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 

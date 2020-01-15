@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
 
 /*
- * This is a simple routine to test turning capabilities.
+ * This is a simple routine to foundationLeft turning capabilities.
  */
 @Config
 @Autonomous(group = "drive")

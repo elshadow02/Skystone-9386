@@ -131,13 +131,13 @@ public class DriveTest extends LinearOpMode {
             }
 
             if (gamepad1.a){
-                robot.block.setPosition(0.15);
+                robot.foundationRight.setPosition(0.15);
             }
             if (gamepad1.x){
-                robot.block.setPosition(1);
+                robot.foundationRight.setPosition(1);
             }
             if (gamepad1.b){
-                robot.block.setPosition(0
+                robot.foundationRight.setPosition(0
                 );
             }
 //            if (gamepad1.a) {
@@ -196,7 +196,7 @@ public class DriveTest extends LinearOpMode {
 
             //arm.update();
 
-            robot.test.setPosition(clawPos);
+            robot.foundationLeft.setPosition(clawPos);
 
             telemetry.addData("ClawPos: ", clawPos);
             telemetry.addData("IMU1: ", orientation.firstAngle);
