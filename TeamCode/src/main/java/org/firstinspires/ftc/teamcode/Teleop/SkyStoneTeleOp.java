@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name="TeleOp")
@@ -30,6 +31,9 @@ public class SkyStoneTeleOp extends LinearOpMode {
         robot.init(hardwareMap);
 
         telemetry.addLine("Init Complete");
+
+        robot.arm.setTargetPosition(0);
+        robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         waitForStart();
 
@@ -76,25 +80,25 @@ public class SkyStoneTeleOp extends LinearOpMode {
             }
 
             if (robot.up.isPressed() == false && robot.down.isPressed() == false) {
-                robot.lift.setPower(-gamepad1.left_stick_y);
+                robot.lift.setPower(-gamepad2.left_stick_y);
                 telemetry.addData("Up", "Is Not Pressed");
                 telemetry.addData("Down", "Is Not Pressed");
             }
             else if (robot.up.isPressed() == true){
-                if ((-gamepad1.left_stick_y) > 0){
+                if ((-gamepad2.left_stick_y) > 0){
                     robot.lift.setPower(0);
                 }
                 else{
-                    robot.lift.setPower(-gamepad1.left_stick_y * 0.6);
+                    robot.lift.setPower(-gamepad2.left_stick_y * 0.6);
                 }
                 telemetry.addData("Up", "Is Pressed");
             }
             else if (robot.down.isPressed() == true){
-                if ((-gamepad1.left_stick_y) < 0){
+                if ((-gamepad2.left_stick_y) < 0){
                     robot.lift.setPower(0);
                 }
                 else{
-                    robot.lift.setPower(-gamepad1.left_stick_y * 0.6);
+                    robot.lift.setPower(-gamepad2.left_stick_y * 0.6);
                 }
                 telemetry.addData("Down", "Is Pressed");
             }
@@ -102,13 +106,28 @@ public class SkyStoneTeleOp extends LinearOpMode {
                 telemetry.addData("ARGH!", "IT BROKE!!");
             }
 
-            robot.arm.setPower(-gamepad2.right_stick_y);
+            if (gamepad2.right_bumper){
+                robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
+            if (gamepad2.left_bumper){
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+            if (robot.arm.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+                robot.arm.setPower(0.7);
+            }
+            else{
+                robot.arm.setPower(-gamepad2.right_stick_y * 0.7);
+            }
 
             if (gamepad1.a){
-                robot.foundationRight.setPosition(0.15);
+                robot.foundationRight.setPosition(0);
+                robot.foundationLeft.setPosition(1.0);
             }
             if (gamepad1.x){
                 robot.foundationRight.setPosition(1);
+                robot.foundationLeft.setPosition(0);
             }
             if (gamepad1.b){
                 robot.foundationRight.setPosition(0
@@ -116,44 +135,46 @@ public class SkyStoneTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.dpad_up){
-                robot.intakeRightServo.setPosition(0.32);
+                robot.intakeRightServo.setPosition(0.4);
             }
 
             if (gamepad1.dpad_down){
-                robot.intakeRightServo.setPosition(0.85);
+                robot.intakeRightServo.setPosition(1.0);
             }
 
             if (gamepad1.dpad_left){
-                robot.intakeLeftServo.setPosition(0.25);
+                robot.intakeLeftServo.setPosition(0.4);
             }
 
             if (gamepad1.dpad_right){
-                robot.intakeLeftServo.setPosition(0.55);
+                robot.intakeLeftServo.setPosition(0.90);
             }
 
             if (gamepad2.b) {
-                robot.claw.setPosition(0.15);
+                robot.claw.setPosition(0.8);
             }
 
             if (gamepad2.x) {
-                robot.claw.setPosition(0);
+                robot.claw.setPosition(1);
             }
 
-            if (gamepad2.a) {
-                clawPos -= 0.01;
+            if (gamepad2.dpad_up){
+                robot.arm.setTargetPosition(240);
             }
 
-            if (gamepad2.y){
-                clawPos += 0.01;
+            if(gamepad2.dpad_down){
+                robot.arm.setTargetPosition(0);
             }
 
-            if (gamepad2.dpad_down) {
-                robot.claw.setPosition(0);
+            if (gamepad2.dpad_right){
+                robot.arm.setTargetPosition(1600);
+            }
+
+            if (gamepad2.dpad_left){
+                robot.arm.setTargetPosition(2100);
             }
 
             //arm.update();
-
-            robot.foundationLeft.setPosition(clawPos);
 
             telemetry.addData("ClawPos: ", clawPos);
             //telemetry.addData("arm: ", arm.getCurrentArmDegree());

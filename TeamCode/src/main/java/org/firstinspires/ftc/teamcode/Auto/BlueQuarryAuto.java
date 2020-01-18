@@ -161,12 +161,22 @@ public class BlueQuarryAuto extends LinearOpMode {
 
         strafe(0.7, travel, 5.0, true);
 
+        drive(0.7, 2, 6.0);
+
+        bot.intakeLeftServo.setPosition(0.4);
+        bot.intakeRightServo.setPosition(1.0);
+
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
 
-        drive(0.4, 38.5, 6.0);
+        drive(0.4, 36.5, 6.0);
 
-        sleep (1000);
+        while (!bot.down.isPressed()){
+            bot.lift.setPower(-1);
+            sleep(750);
+            bot.lift.setPower(0);
+            break;
+        }
 
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);

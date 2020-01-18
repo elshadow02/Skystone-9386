@@ -17,9 +17,9 @@ import com.acmerobotics.dashboard.config.Config;
 
         public static double maxPower = 1;
 
-        public static double kp = 0.005;
+        public static double kp = 0.00092;
         public static double ki = 0.0;
-        public static double kd = 0.0;
+        public static double kd = 1.0;
 
         public DcMotor motor      = null;
 
@@ -27,7 +27,7 @@ import com.acmerobotics.dashboard.config.Config;
 
         public static double gearRatio = 2;
 
-        public double ticksPerAngle = 1;
+        public double ticksPerAngle = 10;
 
         public static int start = 1;
 
@@ -41,8 +41,8 @@ import com.acmerobotics.dashboard.config.Config;
         @Override // @Override tells the computer we intend to override OpMode's method init()
         public void init() {
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-            motor = hardwareMap.get(DcMotor.class, "motor");
-            ticksPerAngle = (motor.getMotorType().getTicksPerRev()/360)*gearRatio;
+            motor = hardwareMap.get(DcMotor.class, "arm");
+            //ticksPerAngle = 10;
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -56,6 +56,23 @@ import com.acmerobotics.dashboard.config.Config;
 
         @Override
         public void loop() {
+            if(start == 2) {
+                motor.setTargetPosition(900);
+                motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motor.setPower(1);
+
+                while (motor.isBusy()) {
+
+                    // Display it for the driver.
+                    telemetry.addLine("The current position: " + motor.getCurrentPosition());
+                    telemetry.update();
+                }
+
+//                motor.setPower(0);
+
+                motor.setTargetPosition(0);
+            }
+
             pid.setkP(kp);
             pid.setkI(ki);
             pid.setkD(kd);
