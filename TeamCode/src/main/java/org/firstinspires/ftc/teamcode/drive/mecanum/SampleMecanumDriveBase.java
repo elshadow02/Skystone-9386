@@ -25,6 +25,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.acmerobotics.roadrunner.util.NanoClock;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
@@ -62,6 +63,8 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     private List<Double> lastWheelPositions;
     private double lastTimestamp;
 
+    public BNO055IMU imu;
+
     public SampleMecanumDriveBase() {
         super(kV, kA, kStatic, TRACK_WIDTH);
 
@@ -84,7 +87,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     }
 
     public void turn(double angle) {
-        double heading = getPoseEstimate().getHeading();
+        double heading = imu.getAngularOrientation().firstAngle;
         turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
                 new MotionState(heading, 0, 0, 0),
                 new MotionState(heading + angle, 0, 0, 0),
@@ -136,7 +139,8 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
 
         packet.put("x", currentPose.getX());
         packet.put("y", currentPose.getY());
-        packet.put("heading", currentPose.getHeading());
+        packet.put("heading", Math.toDegrees(currentPose.getHeading()));
+        packet.put("IMU heading", Math.toDegrees(imu.getAngularOrientation().firstAngle));
 
         packet.put("xError", lastError.getX());
         packet.put("yError", lastError.getY());
@@ -152,7 +156,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
                 MotionState targetState = turnProfile.get(t);
                 double targetOmega = targetState.getV();
                 double targetAlpha = targetState.getA();
-                double correction = turnController.update(currentPose.getHeading(), targetOmega);
+                double correction = turnController.update(imu.getAngularOrientation().firstAngle, targetOmega);
 
                 setDriveSignal(new DriveSignal(new Pose2d(
                         0, 0, targetOmega + correction
