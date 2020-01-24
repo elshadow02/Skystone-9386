@@ -163,8 +163,10 @@ public class BlueQuarryAuto extends LinearOpMode {
 
         drive(0.7, 2, 6.0);
 
-        bot.intakeLeftServo.setPosition(0.4);
+        bot.intakeLeftServo.setPosition(0.3);
         bot.intakeRightServo.setPosition(1.0);
+
+        sleep(1000);
 
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
@@ -173,7 +175,7 @@ public class BlueQuarryAuto extends LinearOpMode {
 
         while (!bot.down.isPressed()){
             bot.lift.setPower(-1);
-            sleep(750);
+            sleep(825);
             bot.lift.setPower(0);
             break;
         }
@@ -183,7 +185,7 @@ public class BlueQuarryAuto extends LinearOpMode {
 
         drive(1.0, -6, 2.0);
 
-        gyroTurn(90, 1.0, 20, 3.0);
+        gyroTurn(90, 1.0, 18, 3.0);
 
         if (SkystonePos == 1){
             drive(1.0, 42, 5.0);
@@ -216,10 +218,10 @@ public class BlueQuarryAuto extends LinearOpMode {
         strafe(1.0, 8, 2.0,false);
 
         if(SkystonePos == 3){
-            gyroTurn(-20, 1.0, 29, 3.0);
+            gyroTurn(-20, 1.0, 27, 3.0);
         }
         else {
-            gyroTurn(0, 1.0, 21.5, 3.0);
+            gyroTurn(0, 1.0, 19.5, 3.0);
         }
 
         bot.intakeLeft.setPower(1);
@@ -242,10 +244,10 @@ public class BlueQuarryAuto extends LinearOpMode {
         strafe(1.0, 8, 2.0, false);
 
         if(SkystonePos == 3){
-            gyroTurn(90, 1.0, 24, 3.0);
+            gyroTurn(90, 1.0, 22, 3.0);
         }
         else {
-            gyroTurn(90, 1.0, 20, 3.0);
+            gyroTurn(90, 1.0, 18, 3.0);
         }
 
         if (SkystonePos == 1){

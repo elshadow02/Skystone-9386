@@ -62,7 +62,7 @@ public class RedFoundationAuto extends LinearOpMode {
 
         drive(1.0, -15, 2.0);
 
-        bot.intakeLeftServo.setPosition(0.4);
+        bot.intakeLeftServo.setPosition(0.3);
         bot.intakeRightServo.setPosition(1.0);
 
         strafe(1.0, 23, 3.0, false);
@@ -87,14 +87,14 @@ public class RedFoundationAuto extends LinearOpMode {
 
         while (!bot.down.isPressed()){
             bot.lift.setPower(-1);
-            sleep(750);
+            sleep(825);
             bot.lift.setPower(0);
             break;
         }
 
-        //drive(1.0, 7, 2.0);
+        drive(1.0, 5, 2.0);
 
-        //strafe(1.0, 23, 5.0, true);
+        strafe(1.0, 30, 5.0, false);
 
         drive(1.0, 30, 5.0);
     }

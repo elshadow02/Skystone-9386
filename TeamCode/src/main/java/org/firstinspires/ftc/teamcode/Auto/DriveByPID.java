@@ -76,19 +76,19 @@ public class DriveByPID extends LinearOpMode {
 
             sleep(5000);
 
-            gyroDrive(0, 1.0, -30, 5.0);
+            gyroTurn(90, 1.0, 30, 5.0);
 
             sleep(5000);
 
-        gyroDrive(90, 1.0, 20, 5.0);
+        gyroDrive(90, 1.0, 30, 5.0);
 
     }
 
 
 
     private void gyroDrive(double targetAngle, double desiredPower, double distance, double timeout) {
-        PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
-        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
+//        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -129,10 +129,10 @@ public class DriveByPID extends LinearOpMode {
 
             double correction = controller.calculate(angleError); //controller.calculate(error);
 
-            double errorPower = (driveControl.calculate(driveError)) * desiredPower;
+            //double errorPower = (driveControl.calculate(driveError)) * desiredPower;
 
-            double rightPower = errorPower + correction;
-            double leftPower  = errorPower - correction;
+            double rightPower = desiredPower + correction;
+            double leftPower  = desiredPower - correction;
 
             double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
             if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage

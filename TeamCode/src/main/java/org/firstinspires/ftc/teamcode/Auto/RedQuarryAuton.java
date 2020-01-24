@@ -144,8 +144,10 @@ public class RedQuarryAuton extends LinearOpMode {
 
         drive(0.7, 2, 6.0);
 
-        bot.intakeLeftServo.setPosition(0.4);
+        bot.intakeLeftServo.setPosition(0.3);
         bot.intakeRightServo.setPosition(1.0);
+
+        sleep(1000);
 
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
@@ -154,7 +156,7 @@ public class RedQuarryAuton extends LinearOpMode {
 
         while (!bot.down.isPressed()){
             bot.lift.setPower(-1);
-            sleep(750);
+            sleep(825);
             bot.lift.setPower(0);
             break;
         }
@@ -164,7 +166,7 @@ public class RedQuarryAuton extends LinearOpMode {
 
         drive(1.0, -6, 2.0);
 
-        gyroTurn(-90, 1.0, 20, 3.0);
+        gyroTurn(-90, 1.0, 18, 3.0);
 
         if (SkystonePos == 1){
             drive(1.0, 42, 5.0);
@@ -197,10 +199,10 @@ public class RedQuarryAuton extends LinearOpMode {
         strafe(1.0, 8, 2.0,true);
 
         if(SkystonePos == 3){
-            gyroTurn(20, 1.0, 29, 3.0);
+            gyroTurn(20, 1.0, 27, 3.0);
         }
         else {
-            gyroTurn(0, 1.0, 21.5, 3.0);
+            gyroTurn(0, 1.0, 19.5, 3.0);
         }
 
         bot.intakeLeft.setPower(1);
@@ -223,10 +225,10 @@ public class RedQuarryAuton extends LinearOpMode {
         strafe(1.0, 8, 2.0, true);
 
         if(SkystonePos == 3){
-            gyroTurn(-90, 1.0, 24, 3.0);
+            gyroTurn(-90, 1.0, 22, 3.0);
         }
         else {
-            gyroTurn(-90, 1.0, 20, 3.0);
+            gyroTurn(-90, 1.0, 18, 3.0);
         }
 
         if (SkystonePos == 1){
@@ -400,7 +402,8 @@ public class RedQuarryAuton extends LinearOpMode {
 
         // Ethan: if you're getting odd values from this controller, switch the below line to: PController controller = new PController(TURN_kP);
         // Read the notes next to TURN_kP if you're still having trouble
-        PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        //PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -451,12 +454,15 @@ public class RedQuarryAuton extends LinearOpMode {
             }
             count += 1;
 
-            telemetry.addData("loop count", count);
-            telemetry.addData("error", error);
-            telemetry.addData("Angle", angle);
-            telemetry.addData("correction", correction);
-            telemetry.addData("rightPower", rightPower);
-            telemetry.addData("leftPower", leftPower);
+            if (Math.abs(error) < 5) {
+                telemetry.addLine("error near");
+            }
+//            telemetry.addData("loop count", count);
+            telemetry.addLine("error: " + error + "; angle: " + angle);
+//            telemetry.addData("Angle", angle);
+//            telemetry.addData("correction", correction);
+//            telemetry.addData("rightPower", rightPower);
+//            telemetry.addData("leftPower", leftPower);
             telemetry.update();
 
             wheel1.setPower(rightPower);

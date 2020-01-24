@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.drive.MecanumDrive;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveBase;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveREVOptimized;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
@@ -18,12 +22,22 @@ public class TurnTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDriveBase drive = new SampleMecanumDriveREVOptimized(hardwareMap);
+        MecanumDriveBase drive = new MecanumDriveREVOptimized(hardwareMap);
+
+        //drive.setLocalizer(new MecanumDrive.MecanumLocalizer(drive, true));
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.turnSync(Math.toRadians(ANGLE));
+        drive.turn(Math.toRadians(ANGLE));
+        while (!isStopRequested() && drive.isBusy()) {
+            drive.update();
+        }
+
+        telemetry.addLine("Heading: " + Math.toDegrees(drive.getExternalHeading()));
+        telemetry.update();
+
+        sleep(5000);
     }
 }

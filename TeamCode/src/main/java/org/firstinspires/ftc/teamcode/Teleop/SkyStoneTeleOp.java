@@ -32,9 +32,6 @@ public class SkyStoneTeleOp extends LinearOpMode {
 
         telemetry.addLine("Init Complete");
 
-        robot.arm.setTargetPosition(0);
-        robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         waitForStart();
 
         while (opModeIsActive()) {
@@ -106,20 +103,8 @@ public class SkyStoneTeleOp extends LinearOpMode {
                 telemetry.addData("ARGH!", "IT BROKE!!");
             }
 
-            if (gamepad2.right_bumper){
-                robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-
-            if (gamepad2.left_bumper){
-                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
-
-            if (robot.arm.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
-                robot.arm.setPower(0.7);
-            }
-            else{
                 robot.arm.setPower(-gamepad2.right_stick_y * 0.7);
-            }
+
 
             if (gamepad1.a){
                 robot.foundationRight.setPosition(0);
@@ -143,7 +128,7 @@ public class SkyStoneTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.dpad_left){
-                robot.intakeLeftServo.setPosition(0.4);
+                robot.intakeLeftServo.setPosition(0.3);
             }
 
             if (gamepad1.dpad_right){
@@ -151,27 +136,11 @@ public class SkyStoneTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.b) {
-                robot.claw.setPosition(0.8);
+                robot.claw.setPosition(0.04);
             }
 
             if (gamepad2.x) {
-                robot.claw.setPosition(1);
-            }
-
-            if (gamepad2.dpad_up){
-                robot.arm.setTargetPosition(240);
-            }
-
-            if(gamepad2.dpad_down){
-                robot.arm.setTargetPosition(0);
-            }
-
-            if (gamepad2.dpad_right){
-                robot.arm.setTargetPosition(1600);
-            }
-
-            if (gamepad2.dpad_left){
-                robot.arm.setTargetPosition(2100);
+                robot.claw.setPosition(0.35);
             }
 
             //arm.update();

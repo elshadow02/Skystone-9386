@@ -36,11 +36,9 @@ public class Setup extends LinearOpMode {
 
         waitForStart();
 
-        while (!bot.down.isPressed()){
             bot.lift.setPower(1);
             sleep(1000);
             bot.lift.setPower(0);
-            break;
-        }
+
     }
 }

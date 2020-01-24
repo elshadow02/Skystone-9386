@@ -62,30 +62,41 @@ public class BlueFoundationAuto extends LinearOpMode {
 
         drive(1.0, -15, 2.0);
 
-        bot.intakeLeftServo.setPosition(0.4);
+        bot.intakeLeftServo.setPosition(0.3);
         bot.intakeRightServo.setPosition(1.0);
 
-        strafe(1.0, 12, 3.0, true);
+        strafe(1.0, 23, 3.0, true);
 
-        drive(1.0, -15, 2.0);
+        drive(1.0, -23, 2.0);
 
         bot.foundationRight.setPosition(1);
         bot.foundationLeft.setPosition(0);
 
-        drive(1.0, 15, 2.0);
+        sleep(2000);
 
-        gyroTurn(-90, 1.0, 20, 2.0);
+        strafe(1.0, 23, 3.0, false);
 
-        drive(1.0, -7, 2.0);
+        drive(1.0, 27, 2.0);
+
+        gyroTurn(90, 1.0, 30, 6.0);
+
+        drive(1.0, -10, 2.0);
 
         bot.foundationRight.setPosition(0);
         bot.foundationLeft.setPosition(1.0);
 
-        drive(1.0, 7, 2.0);
+        while (!bot.down.isPressed()){
+            bot.lift.setPower(-1);
+            sleep(825);
+            bot.lift.setPower(0);
+            break;
+        }
 
-        strafe(1.0, 23, 5.0, false);
+        drive(1.0, 5, 2.0);
 
-        drive(1.0, 27, 5.0);
+        strafe(1.0, 30, 5.0, true);
+
+        drive(1.0, 30, 5.0);
     }
 
     private void strafe(double desiredPower, double distance, double timeout, boolean right) {
