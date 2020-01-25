@@ -25,7 +25,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@Autonomous(name="RedQuarryAuto", group ="Concept")
+@Autonomous(name="BadRQA", group ="Concept")
 public class RedQuarryAuto extends LinearOpMode {
 
     EEHardware bot = new EEHardware();

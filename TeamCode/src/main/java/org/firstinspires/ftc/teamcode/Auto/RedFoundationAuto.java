@@ -244,12 +244,93 @@ public class RedFoundationAuto extends LinearOpMode {
         telemetry.update();
     }
 
+    private void gyroDrive(double targetAngle, double desiredPower, double distance, double timeout) {
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
+//        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+
+        distance = distance * TICKS_PER_INCH;
+
+        wheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double rightStart = bot.frontRight.getCurrentPosition(); // top right
+        double leftStart = bot.frontLeft.getCurrentPosition(); // top left
+
+        double startTime = time;
+
+        double angleError, driveError;
+        double rightError, leftError;
+
+        while (opModeIsActive() && Math.abs(wheel1.getCurrentPosition() - rightStart) < distance && Math.abs(wheel2.getCurrentPosition() - leftStart) < distance) {
+            if (time > startTime + timeout) { // timeout
+                telemetry.addLine("Drive loop timeout.");
+                break;
+            }
+
+            Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            double angle = orientation.thirdAngle;
+            angleError = targetAngle - angle;
+            if (targetAngle - angle > 180) {
+                angleError = targetAngle - (angle + 360);
+            } else if (targetAngle - angle < -180) {
+                angleError = targetAngle - (angle - 360);
+            } else {
+                angleError = targetAngle - angle;
+            }
+
+            rightError = wheel1.getCurrentPosition() - rightStart;
+            leftError = wheel2.getCurrentPosition() - leftStart;
+
+            driveError = (rightError + leftError)/2;
+
+            double correction = controller.calculate(angleError); //controller.calculate(error);
+
+            //double errorPower = (driveControl.calculate(driveError)) * desiredPower;
+
+            double rightPower = desiredPower + correction;
+            double leftPower  = desiredPower - correction;
+
+            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
+            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
+                rightPower = rightPower / max;
+                leftPower = leftPower / max;
+            }
+
+            telemetry.addData("error", angleError);
+            telemetry.addData("correction", correction);
+            telemetry.addData("rightPower", rightPower);
+            telemetry.addData("leftPower", leftPower);
+            //telemetry.addData("kP", controller.getkP());
+            //telemetry.addData("rightEncoder", bot.wheel1.getCurrentPosition());
+            //telemetry.addData("distance", distance);
+            //telemetry.addData("Current angle:", orientation.thirdAngle);
+            telemetry.update();
+            wheel1.setPower(rightPower);
+            wheel4.setPower(rightPower);
+            wheel2.setPower(leftPower);
+            wheel3.setPower(leftPower);
+        }
+
+        telemetry.addData("distance travelled left: ", wheel2.getCurrentPosition() - leftStart);
+        telemetry.addData("distance travelled right: ", wheel1.getCurrentPosition() - rightStart);
+        telemetry.update();
+
+        wheel1.setPower(0);
+        wheel4.setPower(0);
+        wheel2.setPower(0);
+        wheel3.setPower(0);
+    }
+
+    // maxSpeed should be between 0 and 1, everything else is the same.
     private void gyroTurn(double targetAngle, double maxSpeed, double distance, double timeout) {
         maxSpeed = Math.abs(maxSpeed); // make sure speed is positive
 
         // Ethan: if you're getting odd values from this controller, switch the below line to: PController controller = new PController(TURN_kP);
         // Read the notes next to TURN_kP if you're still having trouble
-        PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        //PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -300,12 +381,15 @@ public class RedFoundationAuto extends LinearOpMode {
             }
             count += 1;
 
-            telemetry.addData("loop count", count);
-            telemetry.addData("error", error);
-            telemetry.addData("Angle", angle);
-            telemetry.addData("correction", correction);
-            telemetry.addData("rightPower", rightPower);
-            telemetry.addData("leftPower", leftPower);
+            if (Math.abs(error) < 5) {
+                telemetry.addLine("error near");
+            }
+//            telemetry.addData("loop count", count);
+            telemetry.addLine("error: " + error + "; angle: " + angle);
+//            telemetry.addData("Angle", angle);
+//            telemetry.addData("correction", correction);
+//            telemetry.addData("rightPower", rightPower);
+//            telemetry.addData("leftPower", leftPower);
             telemetry.update();
 
             wheel1.setPower(rightPower);

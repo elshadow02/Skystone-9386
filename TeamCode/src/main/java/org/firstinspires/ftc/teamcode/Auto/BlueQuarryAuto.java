@@ -150,28 +150,21 @@ public class BlueQuarryAuto extends LinearOpMode {
         double travel = 0;
 
         if (SkystonePos == 1){
-            travel = 14.25;
+            travel = 17;
         }
         else if (SkystonePos == 2){
-            travel = 23.25;
+            travel = 29;
         }
         else{
-            travel = 31.75;
+            travel = 37;
         }
 
         strafe(0.7, travel, 5.0, true);
 
-        drive(0.7, 2, 6.0);
+        gyroDrive(0, 0.7, 2, 6.0);
 
         bot.intakeLeftServo.setPosition(0.3);
         bot.intakeRightServo.setPosition(1.0);
-
-        sleep(1000);
-
-        bot.intakeLeft.setPower(1);
-        bot.intakeRight.setPower(1);
-
-        drive(0.4, 36.5, 6.0);
 
         while (!bot.down.isPressed()){
             bot.lift.setPower(-1);
@@ -180,21 +173,28 @@ public class BlueQuarryAuto extends LinearOpMode {
             break;
         }
 
+        bot.intakeLeft.setPower(1);
+        bot.intakeRight.setPower(1);
+
+        gyroDrive(0, 0.4, 36.5, 6.0);
+
+        sleep(350);
+
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -6, 2.0);
+        gyroDrive(0, -1.0, 6, 2.0);
 
         gyroTurn(90, 1.0, 18, 3.0);
 
         if (SkystonePos == 1){
-            drive(1.0, 42, 5.0);
+            gyroDrive(90, 1.0, 46, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, 50, 5.0);
+            gyroDrive(90, 1.0, 54, 5.0);
         }
         else{
-            drive(1.0, 58, 5.0);
+            gyroDrive(90, 1.0, 62, 5.0);
         }
 
         bot.intakeLeft.setPower(-1);
@@ -206,13 +206,13 @@ public class BlueQuarryAuto extends LinearOpMode {
         bot.intakeRight.setPower(0);
 
         if (SkystonePos == 1){
-            drive(1.0, -59, 5.0);
+            gyroDrive(90, -1.0, 51, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, -65, 5.0);
+            gyroDrive(90, -1.0, 59, 5.0);
         }
         else{
-            drive(1.0, -61, 5.0);
+            gyroDrive(90, -1.0, 57, 5.0);
         }
 
         strafe(1.0, 8, 2.0,false);
@@ -221,27 +221,32 @@ public class BlueQuarryAuto extends LinearOpMode {
             gyroTurn(-20, 1.0, 27, 3.0);
         }
         else {
-            gyroTurn(0, 1.0, 19.5, 3.0);
+            gyroTurn(0, 1.0, 21, 3.0);
         }
 
         bot.intakeLeft.setPower(1);
         bot.intakeRight.setPower(1);
 
         if(SkystonePos == 3){
-            drive (0.5, 18.0, 5.0);
+            gyroDrive (-20, 0.5, 23.50, 5.0);
         }
         else {
-            drive (0.5, 14.0, 5.0);
+            gyroDrive (0, 0.5, 22.0, 5.0);
         }
 
-        sleep(1500);
+        sleep(350);
 
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -6.0, 2.0);
+        if(SkystonePos == 3){
+            gyroDrive (-20, -0.5, 7, 5.0);
+        }
+        else {
+            gyroDrive (0, -0.5, 5, 5.0);
+        }
 
-        strafe(1.0, 8, 2.0, false);
+        strafe(1.0, 11, 2.0, false);
 
         if(SkystonePos == 3){
             gyroTurn(90, 1.0, 22, 3.0);
@@ -251,13 +256,13 @@ public class BlueQuarryAuto extends LinearOpMode {
         }
 
         if (SkystonePos == 1){
-            drive(1.0, 69, 5.0);
+            gyroDrive(90, 1.0, 66, 5.0);
         }
         else if (SkystonePos == 2){
-            drive(1.0, 77, 5.0);
+            gyroDrive(90, 1.0, 73, 5.0);
         }
         else{
-            drive(1.0, 81, 5.0);
+            gyroDrive(90, 1.0, 76, 5.0);
         }
 
         bot.intakeLeft.setPower(-1);
@@ -268,7 +273,7 @@ public class BlueQuarryAuto extends LinearOpMode {
         bot.intakeLeft.setPower(0);
         bot.intakeRight.setPower(0);
 
-        drive(1.0, -12, 2.0);
+        gyroDrive(90,-1.0, 12, 2.0);
     }
 
     private void strafe(double desiredPower, double distance, double timeout, boolean right) {
@@ -416,12 +421,93 @@ public class BlueQuarryAuto extends LinearOpMode {
         telemetry.update();
     }
 
+    private void gyroDrive(double targetAngle, double desiredPower, double distance, double timeout) {
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
+//        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
+
+        distance = distance * TICKS_PER_INCH;
+
+        wheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheel4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double rightStart = bot.frontRight.getCurrentPosition(); // top right
+        double leftStart = bot.frontLeft.getCurrentPosition(); // top left
+
+        double startTime = time;
+
+        double angleError, driveError;
+        double rightError, leftError;
+
+        while (opModeIsActive() && Math.abs(wheel1.getCurrentPosition() - rightStart) < distance && Math.abs(wheel2.getCurrentPosition() - leftStart) < distance) {
+            if (time > startTime + timeout) { // timeout
+                telemetry.addLine("Drive loop timeout.");
+                break;
+            }
+
+            Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            double angle = orientation.thirdAngle;
+            angleError = targetAngle - angle;
+            if (targetAngle - angle > 180) {
+                angleError = targetAngle - (angle + 360);
+            } else if (targetAngle - angle < -180) {
+                angleError = targetAngle - (angle - 360);
+            } else {
+                angleError = targetAngle - angle;
+            }
+
+            rightError = wheel1.getCurrentPosition() - rightStart;
+            leftError = wheel2.getCurrentPosition() - leftStart;
+
+            driveError = (rightError + leftError)/2;
+
+            double correction = controller.calculate(angleError); //controller.calculate(error);
+
+            //double errorPower = (driveControl.calculate(driveError)) * desiredPower;
+
+            double rightPower = desiredPower + correction;
+            double leftPower  = desiredPower - correction;
+
+            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
+            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
+                rightPower = rightPower / max;
+                leftPower = leftPower / max;
+            }
+
+            telemetry.addData("error", angleError);
+            telemetry.addData("correction", correction);
+            telemetry.addData("rightPower", rightPower);
+            telemetry.addData("leftPower", leftPower);
+            //telemetry.addData("kP", controller.getkP());
+            //telemetry.addData("rightEncoder", bot.wheel1.getCurrentPosition());
+            //telemetry.addData("distance", distance);
+            //telemetry.addData("Current angle:", orientation.thirdAngle);
+            telemetry.update();
+            wheel1.setPower(rightPower);
+            wheel4.setPower(rightPower);
+            wheel2.setPower(leftPower);
+            wheel3.setPower(leftPower);
+        }
+
+        telemetry.addData("distance travelled left: ", wheel2.getCurrentPosition() - leftStart);
+        telemetry.addData("distance travelled right: ", wheel1.getCurrentPosition() - rightStart);
+        telemetry.update();
+
+        wheel1.setPower(0);
+        wheel4.setPower(0);
+        wheel2.setPower(0);
+        wheel3.setPower(0);
+    }
+
+    // maxSpeed should be between 0 and 1, everything else is the same.
     private void gyroTurn(double targetAngle, double maxSpeed, double distance, double timeout) {
         maxSpeed = Math.abs(maxSpeed); // make sure speed is positive
 
         // Ethan: if you're getting odd values from this controller, switch the below line to: PController controller = new PController(TURN_kP);
         // Read the notes next to TURN_kP if you're still having trouble
-        PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        //PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
+        PIDController controller = new PIDController(TURN_kP, 0, 0);
 
         distance = distance * TICKS_PER_INCH;
 
@@ -472,12 +558,15 @@ public class BlueQuarryAuto extends LinearOpMode {
             }
             count += 1;
 
-            telemetry.addData("loop count", count);
-            telemetry.addData("error", error);
-            telemetry.addData("Angle", angle);
-            telemetry.addData("correction", correction);
-            telemetry.addData("rightPower", rightPower);
-            telemetry.addData("leftPower", leftPower);
+            if (Math.abs(error) < 5) {
+                telemetry.addLine("error near");
+            }
+//            telemetry.addData("loop count", count);
+            telemetry.addLine("error: " + error + "; angle: " + angle);
+//            telemetry.addData("Angle", angle);
+//            telemetry.addData("correction", correction);
+//            telemetry.addData("rightPower", rightPower);
+//            telemetry.addData("leftPower", leftPower);
             telemetry.update();
 
             wheel1.setPower(rightPower);

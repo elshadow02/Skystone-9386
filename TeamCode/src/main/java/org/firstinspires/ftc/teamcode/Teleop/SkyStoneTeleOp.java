@@ -107,11 +107,11 @@ public class SkyStoneTeleOp extends LinearOpMode {
 
 
             if (gamepad1.a){
-                robot.foundationRight.setPosition(0);
+                robot.foundationRight.setPosition(1);
                 robot.foundationLeft.setPosition(1.0);
             }
             if (gamepad1.x){
-                robot.foundationRight.setPosition(1);
+                robot.foundationRight.setPosition(0);
                 robot.foundationLeft.setPosition(0);
             }
             if (gamepad1.b){
@@ -140,7 +140,7 @@ public class SkyStoneTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.x) {
-                robot.claw.setPosition(0.35);
+                robot.claw.setPosition(0.4);
             }
 
             //arm.update();
